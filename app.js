@@ -9,6 +9,19 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+var helmet = require('helmet');
+app.use(helmet());
+app.use(helmet.noCache());
+app.disable('x-powered-by');
+app.use(express.urlencoded({extended: true}));
+app.set('trust proxy', 1)
+
+// passport settings
+require('./auth/passport.js').setup(app);
+
+// routing
+app.use('/', require('./routes/users'));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
